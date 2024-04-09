@@ -26,7 +26,7 @@ class KakaoLoginBloc extends Bloc<KakaoLoginEvent, KakaoLoginState> {
       //print('\n닉네임: ${user.kakaoAccount?.profile?.nickname}'
       //'\n이메일: ${user.kakaoAccount?.email}');
       emit(KakaoLoginSuccess(
-          AUser(nickName: user.kakaoAccount?.profile?.nickname)));
+          UserProfile(nickName: user.kakaoAccount?.profile?.nickname)));
     } catch (e) {
       emit(KakaoLoginFailure(e.toString()));
     }

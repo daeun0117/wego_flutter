@@ -51,11 +51,12 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(
                   height: 200,
                 ),
-                ElevatedButton(
+                IconButton(
+                  icon: Image.asset('assets/images/kakao_login.png'),
+                  iconSize: 70,
                   onPressed: () {
                     context.read<KakaoLoginBloc>().add(LoginWithKakao());
                   },
-                  child: const Text('KaKao Login'),
                 ),
                 ElevatedButton(
                   onPressed: () {

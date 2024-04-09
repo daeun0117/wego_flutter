@@ -1,5 +1,5 @@
-class AUser {
+class UserProfile {
   final String? nickName;
 
-  AUser({this.nickName});
+  UserProfile({this.nickName});
 }

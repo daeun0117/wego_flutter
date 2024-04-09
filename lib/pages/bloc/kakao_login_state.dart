@@ -13,7 +13,7 @@ class KakaoLoginInitial extends KakaoLoginState {}
 class KakaoLoginLoading extends KakaoLoginState {}
 
 class KakaoLoginSuccess extends KakaoLoginState {
-  final AUser user;
+  final UserProfile user;
 
   const KakaoLoginSuccess(this.user);
 
