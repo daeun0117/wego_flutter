@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:wegotogether_login/domain/entities/user.dart';
+import 'package:wegotogether_login/domain/entities/user_profile.dart';
 
 abstract class KakaoLoginState extends Equatable {
   const KakaoLoginState();

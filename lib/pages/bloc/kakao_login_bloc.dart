@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:wegotogether_login/domain/entities/user.dart';
+import 'package:wegotogether_login/domain/usecase/auth/kakao_login_usecase.dart';
+import 'package:wegotogether_login/domain/usecase/auth/kakao_logout_usecase.dart';
 import 'package:wegotogether_login/pages/bloc/kakao_login_event.dart';
 import 'package:wegotogether_login/pages/bloc/kakao_login_state.dart';
 
@@ -9,6 +9,8 @@ class KakaoLoginBloc extends Bloc<KakaoLoginEvent, KakaoLoginState> {
     on<LoginWithKakao>(_onLoginWithKakao);
     on<LogoutFromKakao>(_onLogoutFromKakao);
   }
+  final _loginUseCase = KakaoLoginUseCase();
+  final _logoutUseCase = KakaoLogoutUseCase();
 
   Future<void> _onLoginWithKakao(
     LoginWithKakao event,
@@ -16,17 +18,8 @@ class KakaoLoginBloc extends Bloc<KakaoLoginEvent, KakaoLoginState> {
   ) async {
     emit(KakaoLoginLoading());
     try {
-      bool isInstalled = await isKakaoTalkInstalled();
-      if (isInstalled) {
-        await UserApi.instance.loginWithKakaoTalk();
-      } else {
-        await UserApi.instance.loginWithKakaoAccount();
-      }
-      final user = await UserApi.instance.me();
-      //print('\n닉네임: ${user.kakaoAccount?.profile?.nickname}'
-      //'\n이메일: ${user.kakaoAccount?.email}');
-      emit(KakaoLoginSuccess(
-          UserProfile(nickName: user.kakaoAccount?.profile?.nickname)));
+      final userProfile = await _loginUseCase();
+      emit(KakaoLoginSuccess(userProfile));
     } catch (e) {
       emit(KakaoLoginFailure(e.toString()));
     }
@@ -37,7 +30,7 @@ class KakaoLoginBloc extends Bloc<KakaoLoginEvent, KakaoLoginState> {
     Emitter<KakaoLoginState> emit,
   ) async {
     try {
-      await UserApi.instance.unlink();
+      await _logoutUseCase();
       emit(KakaoLogoutComplete());
     } catch (e) {
       emit(KakaoLoginFailure(e.toString()));

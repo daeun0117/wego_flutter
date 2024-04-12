@@ -13,62 +13,59 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: BlocBuilder<KakaoLoginBloc, KakaoLoginState>(
-          builder: (context, state) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  height: 150,
-                ),
-                if (state is KakaoLoginSuccess)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        state.user.nickName ?? '',
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w800),
-                      ),
-                      const Text(
-                        '님 어서오세요',
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w800),
-                      ),
-                    ],
-                  ),
-                const SizedBox(
-                  height: 50,
-                ),
-                const Text(
-                  "We Go Together",
-                  style: TextStyle(
-                      fontSize: 30,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w900),
-                ),
-                const SizedBox(
-                  height: 200,
-                ),
-                IconButton(
-                  icon: Image.asset('assets/images/kakao_login.png'),
-                  iconSize: 70,
-                  onPressed: () {
-                    context.read<KakaoLoginBloc>().add(LoginWithKakao());
-                  },
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    context.read<KakaoLoginBloc>().add(LogoutFromKakao());
-                  },
-                  child: const Text('Logout'),
-                ),
-                if (state is KakaoLoginLoading)
-                  const CircularProgressIndicator(),
-              ],
-            );
-          },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 150,
+            ),
+            BlocBuilder<KakaoLoginBloc, KakaoLoginState>(
+              builder: (context, state) {
+                if (state is KakaoLoginLoading) {
+                  return const CircularProgressIndicator();
+                } else if (state is KakaoLoginSuccess) {
+                  return Text(
+                    "${state.user.nickName}님 어서오세요",
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.w800),
+                  );
+                } else {
+                  return Text('유저 정보가 없습니다.');
+                }
+              },
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            const Text(
+              "We Go Together",
+              style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w900),
+            ),
+            const SizedBox(
+              height: 150,
+            ),
+            BlocBuilder<KakaoLoginBloc, KakaoLoginState>(
+              builder: (context, state) => IconButton(
+                icon: Image.asset('assets/images/kakao_login.png'),
+                iconSize: 70,
+                onPressed: () {
+                  context.read<KakaoLoginBloc>().add(LoginWithKakao());
+                },
+              ),
+            ),
+            BlocBuilder<KakaoLoginBloc, KakaoLoginState>(
+              builder: (context, state) => ElevatedButton(
+                onPressed: () {
+                  context.read<KakaoLoginBloc>().add(LogoutFromKakao());
+                },
+                child: const Text('Logout'),
+              ),
+            ),
+          ],
         ),
       ),
     );
